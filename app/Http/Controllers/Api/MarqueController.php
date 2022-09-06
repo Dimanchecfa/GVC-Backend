@@ -79,10 +79,7 @@ class MarqueController extends Controller
             ], 500);
         }
     }
-    {
-        //
-    }
-
+  
     /**
      * Update the specified resource in storage.
      *
@@ -125,7 +122,7 @@ class MarqueController extends Controller
     public function destroy($id)
     {
         try {
-            $marque = Marque::find($id);
+        $marque = Marque::find($id);
             $marque->delete();
             return response()->json([
                 'message' => 'Marque supprimée avec succès',

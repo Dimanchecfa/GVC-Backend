@@ -24,6 +24,12 @@ class DashboardController extends Controller
         return response()->json($todayMotoNumber);
     }
 
+    public function getSellMotoByDate($date) {
+        $todaySell= Vente::whereDate('created_at', $date)->get();
+        $todayMotoNumber = count($todaySell);
+        return response()->json($todaySell);
+    }
+
 
 
 }

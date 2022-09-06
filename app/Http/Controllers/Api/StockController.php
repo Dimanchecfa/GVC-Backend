@@ -44,6 +44,11 @@ class StockController extends Controller
 
         $input = $request->all();
         $input['numero_stock'] = $stockNumber;
+        $stock = Stock::create($input);
+        return response()->json([
+            'message' => 'Stock enregistré avec succès',
+            'stock' => $stock
+        ], 200);
         
 
 
@@ -52,25 +57,51 @@ class StockController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Stock  $stock
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Stock $stock)
     {
-        //
+        try {
+            $stock = Stock::find($stock);
+            return response()->json([
+                'message' => 'Stock trouvé avec succès',
+                'stock' => $stock
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Stock introuvable',
+                'error' => $th
+            ], 404);
+        }
     }
+  
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Stock  $stock
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Stock $stock)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'numero_stock' => 'required',
+            'nom_fournisseur' => 'required',
+            'numero_fournisseur' => 'required',
+        ]);
+        if($validate->fails) {
+            return response()->json([
+                'message' => 'Veuillez remplir tous les champs',
+                'errors' => $validate->errors()
+            ], 400);
+        }
+        $stock = Stock::find($stock);
+        $stock->update($request->all());
+
     }
+   
 
     /**
      * Remove the specified resource from storage.
