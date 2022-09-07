@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Stock;
+use BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class StockController extends Controller
+class StockController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +17,13 @@ class StockController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $stocks = Stock::all();
+            return $this->sendResponse($stocks, 'Liste des stocks récupérés avec succès');
+        }
+        catch(\Throwable $th){
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
     }
 
     /**
@@ -25,30 +34,28 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'numero_stock' => 'required',
-            'nom_fournisseur' => 'required',
-            'numero_fournisseur' => 'required',
-        ]);
+       $validate = Validator::make($request->all(), [
+            'numero_serie' => 'required|string|max:255',
+
+        ]); 
+
         if($validate->fails) {
-            return response()->json([
-                'message' => 'Veuillez remplir tous les champs',
-                'errors' => $validate->errors()
-            ], 400);
+            return $this->sendError('Veuillez remplir tous les champs', $validate->errors(), 400);
         }
+      try { 
         if(Stock::all()->count() < 1) {
             $stockNumber = 'STOCK-'.date('Y').'-'.date('m').'-'.date('d').'/'.'00';
         }
         $lastStock = Stock::orderBy('created_at', 'desc')->first();
-        $stockNumber = 'STOCK-'.date('Y').'-'.date('m').'-'.date('d').'-'.($lastStock->id + 00);
+        $stockNumber = 'STOCK-'.date('Y').'-'.date('m').'-'.date('d').'/'.($lastStock->id + 00);
 
         $input = $request->all();
         $input['numero_stock'] = $stockNumber;
         $stock = Stock::create($input);
-        return response()->json([
-            'message' => 'Stock enregistré avec succès',
-            'stock' => $stock
-        ], 200);
+        return $this->sendResponse($stock, 'Stock ajouté avec succès');
+    }catch(\Throwable $th){
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
+    }
         
 
 
@@ -64,15 +71,9 @@ class StockController extends Controller
     {
         try {
             $stock = Stock::find($stock);
-            return response()->json([
-                'message' => 'Stock trouvé avec succès',
-                'stock' => $stock
-            ], 200);
+            return $this->sendResponse($stock, 'Stock récupéré avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Stock introuvable',
-                'error' => $th
-            ], 404);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
   
@@ -87,18 +88,18 @@ class StockController extends Controller
     public function update(Request $request, Stock $stock)
     {
         $validate = Validator::make($request->all(), [
-            'numero_stock' => 'required',
             'nom_fournisseur' => 'required',
             'numero_fournisseur' => 'required',
         ]);
         if($validate->fails) {
-            return response()->json([
-                'message' => 'Veuillez remplir tous les champs',
-                'errors' => $validate->errors()
-            ], 400);
+            return $this->sendError('Veuillez remplir tous les champs', $validate->errors(), 400);
         }
-        $stock = Stock::find($stock);
+      try{
         $stock->update($request->all());
+        return $this->sendResponse($stock, 'Stock modifié avec succès');
+      } catch (\Throwable $th) {
+        return $this->sendError('Une erreur est survenue', $th->getMessage());
+      }
 
     }
    

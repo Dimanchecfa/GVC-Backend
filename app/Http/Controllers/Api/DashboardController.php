@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Vente;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -12,8 +13,12 @@ class DashboardController extends Controller
     {
         $today = date('Y-m-d');
         $todaySell= Vente::whereDate('created_at', $today)->get();
-        $todaySellPrice = sum($todaySell->prix_vente);
-        return response()->json($todaySellPrice);
+        $todaySellPrice = 0;
+        foreach($todaySell as $sell) {
+            $todaySellPrice += $sell->montant_verse;
+        }
+        return $todaySellPrice;
+        return $this->sendResponse($todaySellPrice, 'Montant total des ventes du jour');
     }
 
     public function getTodayMotoNumber()
@@ -21,14 +26,10 @@ class DashboardController extends Controller
         $today = date('Y-m-d');
         $todaySell= Vente::whereDate('created_at', $today)->get();
         $todayMotoNumber = count($todaySell);
-        return response()->json($todayMotoNumber);
+        return $this->sendResponse($todayMotoNumber, 'Nombre total des motos vendues du jour');
     }
 
-    public function getSellMotoByDate($date) {
-        $todaySell= Vente::whereDate('created_at', $date)->get();
-        $todayMotoNumber = count($todaySell);
-        return response()->json($todaySell);
-    }
+   
 
 
 

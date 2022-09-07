@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Commerciale;
+use BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class CommercialeController extends Controller
+class CommercialeController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -16,15 +19,9 @@ class CommercialeController extends Controller
     {
         try {
             $commerciales = Commerciale::all();
-            return response()->json([
-                'message' => 'Liste des commerciales',
-                'commerciales' => $commerciales
-            ], 200);
+           return $this->sendResponse($commerciales, 'Liste des commerciales récupérées avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
 
@@ -43,22 +40,13 @@ class CommercialeController extends Controller
             'logo' => 'required',
         ]);
         if($validate->fails) {
-            return response()->json([
-                'message' => 'Veuillez remplir tous les champs',
-                'errors' => $validate->errors()
-            ], 400);
+            return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
             $commerciale = Commerciale::create($request->all());
-            return response()->json([
-                'message' => 'Commerciale ajoutée avec succès',
-                'commerciale' => $commerciale
-            ], 200);
+                return $this->sendResponse( $commerciale ,'Commerciale ajoutée avec succès',);
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
 
@@ -68,18 +56,12 @@ class CommercialeController extends Controller
      * @param  \App\Models\Commerciale  $commerciale
      * @return \Illuminate\Http\Response
      */
-    public function show( Commercial $commerciale)
+    public function show( Commerciale $commerciale)
     {
         try {
-            return response()->json([
-                'message' => 'Commerciale',
-                'commerciale' => $commerciale
-            ], 200);
+            return $this->sendResponse($commerciale, 'Commerciale récupérée avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+           return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
    
@@ -100,22 +82,13 @@ class CommercialeController extends Controller
              'logo' => 'required',
          ]);
          if($validate->fails) {
-             return response()->json([
-                 'message' => 'Veuillez remplir tous les champs',
-                 'errors' => $validate->errors()
-             ], 400);
+             return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
          }
          try {
              $commerciale->update($request->all());
-             return response()->json([
-                 'message' => 'Commerciale modifiée avec succès',
-                 'commerciale' => $commerciale
-             ], 200);
+             return $this->sendResponse($commerciale, 'Commerciale modifiée avec succès');
          } catch (\Throwable $th) {
-             return response()->json([
-                 'message' => 'Une erreur est survenue',
-                 'error' => $th->getMessage()
-             ], 500);
+             return $this->sendError('Une erreur est survenue', $th->getMessage());
          }
     }
 
@@ -129,14 +102,9 @@ class CommercialeController extends Controller
     {
         try {
             $commerciale->delete();
-            return response()->json([
-                'message' => 'Commerciale supprimée avec succès',
-            ], 200);
+            return $this->sendResponse($commerciale, 'Commerciale supprimée avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
   

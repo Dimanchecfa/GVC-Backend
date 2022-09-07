@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Marque;
+use BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class MarqueController extends Controller
+class MarqueController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -16,15 +19,9 @@ class MarqueController extends Controller
     {
         try {
             $marques = Marque::all();
-            return response()->json([
-                'message' => 'Liste des marques',
-                'marques' => $marques
-            ], 200);
+            return $this -> sendResponse($marques, 'Liste des marques récupérées avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return  $this -> sendError('Une erreur est survenue', $th->getMessage());
         }
     }
 
@@ -36,26 +33,20 @@ class MarqueController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'nom' => 'required',
+        $validate = Validator::make($request->all(), [
+            'nom' => 'required|string|max:255',
+            
         ]);
+
+
         if($validate->fails) {
-            return response()->json([
-                'message' => 'Veuillez remplir tous les champs',
-                'errors' => $validate->errors()
-            ], 400);
+            return $this -> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
             $marque = Marque::create($request->all());
-            return response()->json([
-                'message' => 'Marque ajoutée avec succès',
-                'marque' => $marque
-            ], 200);
+            return $this -> sendResponse( $marque ,'Marque ajoutée avec succès',);
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this -> sendError('Une erreur est survenue', $th->getMessage());
         }
     }
 
@@ -68,15 +59,9 @@ class MarqueController extends Controller
     public function show(Marque $marque)
     {
         try {
-            return response()->json([
-                'message' => 'Marque',
-                'marque' => $marque
-            ], 200);
+            return $this -> sendResponse($marque, 'Marque récupérée avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this -> sendError('Une erreur est survenue', $th->getMessage());
         }
     }
   
@@ -89,26 +74,18 @@ class MarqueController extends Controller
      */
     public function update(Request $request, Marque $marque)
     {
-        $validate = $request->validate([
-            'nom' => 'required',
+        $validate = Validator::make($request->all(), [
+            'nom' => 'required|string|max:255',
+            
         ]);
         if($validate->fails) {
-            return response()->json([
-                'message' => 'Veuillez remplir tous les champs',
-                'errors' => $validate->errors()
-            ], 400);
+            return $this-> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
             $marque->update($request->all());
-            return response()->json([
-                'message' => 'Marque modifiée avec succès',
-                'marque' => $marque
-            ], 200);
+                return $this->sendResponse($marque ,'Marque modifiée avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
     
@@ -124,15 +101,9 @@ class MarqueController extends Controller
         try {
         $marque = Marque::find($id);
             $marque->delete();
-            return response()->json([
-                'message' => 'Marque supprimée avec succès',
-                'marque' => $marque
-            ], 200);
+            return $this->sendResponse($marque, 'Marque supprimée avec succès');
         } catch (\Throwable $th) {
-            return response()->json([
-                'message' => 'Une erreur est survenue',
-                'error' => $th->getMessage()
-            ], 500);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
 
