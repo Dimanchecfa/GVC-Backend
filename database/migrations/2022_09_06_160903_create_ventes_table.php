@@ -19,22 +19,17 @@ class CreateVentesTable extends Migration
             $table->string('numero_client');
             $table->string('adresse_client');
             $table->string('identifiant_client');
-            $table->string('numero_serie');
-            $table->string('pseudo');
+            $table->string('pseudo_commerciale');
+            $table->string('numero_serie');    
             $table->string('marque');
             $table->string('modele');
-            $table->foreign('numero_serie')->references('numero_serie')->on('motos');
-            // $table->foreign('pseudo')->references('pseudo')->on('commerciales')->unique();
-            $table->foreign('marque')->references('nom')->on('marques')->unique();
-            $table->foreign('modele')->references('nom')->on('modeles')->unique();
             $table->string('couleur');
-            $table->string('date_vente');
             $table->string('prix_vente');
             $table->string('montant_verse');
-            $table->string('montant_restant');
-            $table->enum('statut', ['en cours', 'payé',])->default('payé');
-            $table->date('date_versement');
-            $table->string('numero_facture')->unique();
+            $table->string('montant_restant')->nullable();
+            $table->enum('statut', ['en_cours', 'payé',])->default('payé');
+            $table->date('date_versement')->nullable();
+            $table->string('numero_facture')->unique()->nullable();
            
 
 

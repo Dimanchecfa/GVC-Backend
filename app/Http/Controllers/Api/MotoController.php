@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Moto;
 use App\Models\Stock;
-use BaseController;
+use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -70,7 +70,11 @@ class MotoController extends BaseController
     {
         try {
             $moto = Moto::where('numero_serie', $numero_serie)->first();
+            if(is_null($moto)){
+                return $this->sendError('Moto non trouvée');
+            }
             return $this->sendResponse($moto, 'Moto récupérée avec succès');
+
         } catch (\Throwable $th) {
             return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
@@ -83,10 +87,11 @@ class MotoController extends BaseController
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Moto  $moto
+     * @param  $numero_serie
      * @return \Illuminate\Http\Response
      */
-     public function update(Request $request, Moto $moto) 
+     public function update(Request $request, $numero_serie)
+    
     {
         $validate = Validator::make( $request -> all(), [
             'numero_serie' => 'required|string|max:255',
@@ -95,13 +100,18 @@ class MotoController extends BaseController
             'marque' => 'required|string|max:255',
         ]); 
 
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
 
         try {
+            $moto = Moto::where('numero_serie', $numero_serie)->first();
+         if(is_null($moto)) {
+             return $this->sendError('Moto non trouvée');
+         }
             $moto->update($request->all());
-            return $this->sendResponse($moto, 'Moto mise à jour avec succès');                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+            return $this->sendResponse($moto, 'Moto modifiée avec succès');
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
         } catch (\Throwable $th) {
             return $this->sendError('Une erreur est survenue', $th->getMessage()    );
         }
@@ -110,19 +120,23 @@ class MotoController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Moto  $moto
+     * @param  $numero_serie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Moto $moto)
+    public function destroy( $numero_serie)
     {
         try {
+            $moto = Moto::where('numero_serie', $numero_serie)->first();
+            if(is_null($moto)) {
+                return $this->sendError('Moto non trouvée');
+            }
             $moto->delete();
-            return $this->sendResponse('Moto supprimée avec succès', 200);  
+            return $this->sendResponse($moto, 'Moto supprimée avec succès');
         } catch (\Throwable $th) {
-            return $this->sendError('Une erreur est survenue', $th->getMessage(),);
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
-    
     }
+   
 
     public function getMotoByStock($numero_stock)
     {

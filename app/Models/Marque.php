@@ -19,8 +19,5 @@ class Marque extends Model
         'updated_at',
     ];
 
-    public function getRouteKeyName()
-    {
-        return 'nom';
-    }
+
 }

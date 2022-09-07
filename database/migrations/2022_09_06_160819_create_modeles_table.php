@@ -17,7 +17,6 @@ class CreateModelesTable extends Migration
             $table->id();
             $table->string('nom')->unique(); 
             $table->string('marque_nom');
-            $table->foreign('marque_nom')->references('nom')->on('marques');
             $table->timestamps();
         });
     }

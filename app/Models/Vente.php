@@ -12,14 +12,14 @@ class Vente extends Model
     protected $fillable = [
       
         'nom_client',
+        'numero_client',
         'adresse_client',
         'identifiant_client',
         'numero_serie',
-        'pseudo',
+        'pseudo_commerciale',
         'marque',
         'modele',
         'couleur',
-        'date_vente',
         'prix_vente',
         'montant_verse',
         'montant_restant',

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Marque;
-use BaseController;
+use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,36 +53,47 @@ class MarqueController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  Marque  $marque
+     * @param   $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Marque $marque)
+    public function show( $id)
     {
         try {
+            $marque = Marque::find($id);
+            if(is_null($marque)) {
+                return $this -> sendError('Marque non trouvée');
+            }
             return $this -> sendResponse($marque, 'Marque récupérée avec succès');
         } catch (\Throwable $th) {
             return $this -> sendError('Une erreur est survenue', $th->getMessage());
         }
     }
+   
   
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Marque  $marque
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Marque $marque)
+    public function update(Request $request,$id)
     {
         $validate = Validator::make($request->all(), [
             'nom' => 'required|string|max:255',
             
         ]);
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this-> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
+            $marque = Marque::find($id);
+            if(is_null($marque)) {
+                return $this -> sendError('Marque non trouvée');
+            }
             $marque->update($request->all());
+
+
                 return $this->sendResponse($marque ,'Marque modifiée avec succès');
         } catch (\Throwable $th) {
             return $this->sendError('Une erreur est survenue', $th->getMessage());

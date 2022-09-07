@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\BaseController;
 use App\Models\Vente;
+use App\Models\Modele;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class DashboardController extends BaseController
 {
     
     public function getTodaySellPrice()
@@ -17,7 +18,7 @@ class DashboardController extends Controller
         foreach($todaySell as $sell) {
             $todaySellPrice += $sell->montant_verse;
         }
-        return $todaySellPrice;
+        
         return $this->sendResponse($todaySellPrice, 'Montant total des ventes du jour');
     }
 
@@ -28,6 +29,8 @@ class DashboardController extends Controller
         $todayMotoNumber = count($todaySell);
         return $this->sendResponse($todayMotoNumber, 'Nombre total des motos vendues du jour');
     }
+
+ 
 
    
 

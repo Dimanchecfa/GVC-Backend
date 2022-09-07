@@ -10,7 +10,7 @@ class Stock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'numero_stock',
+        'numero',
         'nom_fournisseur',
         'numero_fournisseur',
         'nombre_moto',
@@ -18,6 +18,6 @@ class Stock extends Model
 
     public function getRouteKeyName()
     {
-        return 'numero_stock';
+        return 'numero';
     }
 }

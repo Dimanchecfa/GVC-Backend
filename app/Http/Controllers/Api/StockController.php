@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stock;
-use BaseController;
+use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,11 +35,14 @@ class StockController extends BaseController
     public function store(Request $request)
     {
        $validate = Validator::make($request->all(), [
-            'numero_serie' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'nom_fournisseur' => 'required|string|max:255',
+            'numero_fournisseur' => 'required|string|max:255',
+            
 
         ]); 
 
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors(), 400);
         }
       try { 
@@ -64,37 +67,46 @@ class StockController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Stock  $stock
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Stock $stock)
+    public function show( $id)
     {
-        try {
-            $stock = Stock::find($stock);
+        try{
+            $stock = Stock::find($id);
+            if(is_null($stock)){
+                return $this->sendError('Stock non trouvé');
+            }
             return $this->sendResponse($stock, 'Stock récupéré avec succès');
-        } catch (\Throwable $th) {
+        }
+        catch(\Throwable $th){
             return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
     }
+   
   
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Stock  $stock
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Stock $stock)
+    public function update(Request $request, $id)
     {
         $validate = Validator::make($request->all(), [
             'nom_fournisseur' => 'required',
             'numero_fournisseur' => 'required',
         ]);
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors(), 400);
         }
       try{
+        $stock = Stock::find($id);
+        if(is_null($stock)){
+            return $this->sendError('Stock non trouvé');
+        }
         $stock->update($request->all());
         return $this->sendResponse($stock, 'Stock modifié avec succès');
       } catch (\Throwable $th) {
@@ -107,11 +119,20 @@ class StockController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy( $id )
     {
-        //
+        try {
+            $stock = Stock::find($id);
+            if(is_null($stock)){
+                return $this->sendError('Stock non trouvé');
+            }
+            $stock->delete();
+            return $this->sendResponse($stock, 'Stock supprimé avec succès');
+        } catch (\Throwable $th) {
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
     }
 }

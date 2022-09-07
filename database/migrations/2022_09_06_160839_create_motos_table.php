@@ -14,14 +14,15 @@ class CreateMotosTable extends Migration
     public function up()
     {
         Schema::create('motos', function (Blueprint $table) {
-            $table->id();       
-             $table->string('numero_serie')->unique();
-             $table->string('marque');
+            $table->id();
+            $table->string('numero_serie')->unique();
+            $table->string('numero_stock');
+            $table->string('marque');
             $table->string('modele');
-            $table->enum ('statut', ['en stock', 'vendue', ])->default('en stock');
-            $table->foreign('marque')->references('nom')->on('marques');
-           $table->foreign('modele')->references('nom')->on('modeles');
-            $table->string('couleur'); 
+            $table->enum('statut', ['en_stock', 'vendue'])->default('en_stock');
+            $table->string('couleur');
+            
+            
 
             $table->timestamps();
         });

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Modele;
-use BaseController;
+use App\Http\Controllers\Api\BaseController;
 use Illuminate\Support\Facades\Validator;
 
 class ModeleController extends BaseController
@@ -52,38 +52,48 @@ class ModeleController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  Modele  $modele
+     * @param  Modele  $modele $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Modele $modele)
+    public function show($id)
     {
         try {
-            return $this->sendResponse($modele, 'Modèle récupéré avec succès');
+            $modele = Modele::find($id);
+            if(is_null($modele)) {
+                return $this -> sendError('Modèle non trouvé');
+            }
+            return $this -> sendResponse($modele, 'Modèle récupéré avec succès');
         } catch (\Throwable $th) {
-            return $this->sendError('Une erreur est survenue', $th->getMessage());  
+            return $this -> sendError('Une erreur est survenue', $th->getMessage());
         }
     }
+  
    
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Modele  $modele
+     * @param   $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Modele $modele)
+    public function update(Request $request, $id )
     {
         $validate = Validator::make($request->all(), [
             'nom' => 'required|string|max:255',
-            'marque_nom' => 'required|integer'
+            'marque_nom' => 'required|string|max:255'
         ]);
 
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this -> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
+            $modele = Modele::find($id);
+            if(is_null($modele)) {
+                return $this -> sendError('Modèle non trouvé');
+            }
             $modele->update($request->all());
+            return $this -> sendResponse($modele, 'Modèle modifié avec succès');
             return response()->json([
                 'message' => 'Modèle modifié avec succès',
                 'modele' => $modele
@@ -104,17 +114,19 @@ class ModeleController extends BaseController
      */
     public function destroy($id)
     {
-        //
-    }
-
-    public function getModelesByMarque($marque_nom) {
         try {
-            $modeles = Modele::where('marque_nom', $marque_nom)->get();
-            return $this->sendResponse($modeles, 'Liste des modèles récupérés avec succès');
+            $modele = Modele::find($id);
+            if(is_null($modele)) {
+                return $this -> sendError('Modèle non trouvé');
+            }
+            $modele->delete();
+            return $this -> sendResponse($modele, 'Modèle supprimé avec succès');
         } catch (\Throwable $th) {
-            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+            return $this -> sendError('Une erreur est survenue', $th->getMessage());
         }
     }
+
+  
 
  
 }
