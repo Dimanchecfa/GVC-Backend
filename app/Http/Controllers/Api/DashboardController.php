@@ -29,6 +29,18 @@ class DashboardController extends BaseController
         $todayMotoNumber = count($todaySell);
         return $this->sendResponse($todayMotoNumber, 'Nombre total des motos vendues du jour');
     }
+    public function getCurrentMonthSell () 
+    {
+        $currentMonth = date('m');
+        $currentMonthSell = Vente::whereMonth('created_at', $currentMonth)->get();
+        return $this->sendResponse($currentMonthSell, 'Liste des motos vendues ');
+    }
+
+
+   
+  
+
+ 
 
  
 

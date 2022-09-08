@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\Vente;
 use App\Http\Controllers\Api\BaseController;
 use Illuminate\Http\Request;
+use App\Models\Vente;
+use App\Models\Modele;
+use App\Models\Marque;
 
-class HistoryController extends BaseController
+
+class HistoricalController extends BaseController
 {
-
+    
     public function getSellByDate($date) {
         $motos = Vente::whereDate('created_at', $date)->get();
-        return $this->sendResponse($motos, 'Liste des motos vendues le '.$date);
+
+        if(count($motos) > 0) {
+            return $this->sendResponse($motos, 'Liste des ventes');
+        } else {
+            return $this->sendResponse($motos , 'Aucune vente');
+        }
+        
     }
     public function getSellMotoNumberByDate($date) {
         $motos = Vente::whereDate('created_at', $date)->get();
@@ -62,13 +70,12 @@ class HistoryController extends BaseController
         $total = count($motos);
         return $this->sendResponse($total, 'Nombre total des motos vendues du '.$date);
     }
-
-    public function getCurrentMonthSell () {
+    public function getCurrentMonthSellMotoNumber () {
         $currentMonth = date('m');
         $currentMonthSell = Vente::whereMonth('created_at', $currentMonth)->get();
-        return $this->sendResponse($currentMonthSell, 'Liste des motos vendues ce mois-ci');
+        $currentMonthMotoNumber = count($currentMonthSell);
+        return $this->sendResponse($currentMonthMotoNumber, 'Nombre total des motos vendues ce mois-ci');
     }
-
     public function getCurrentMonthSellPrice () {
         $currentMonth = date('m');
         $currentMonthSell = Vente::whereMonth('created_at', $currentMonth)->get();
@@ -76,12 +83,23 @@ class HistoryController extends BaseController
         foreach($currentMonthSell as $sell) {
             $currentMonthSellPrice += $sell->montant_verse;
         }
-        return $this->sendResponse($currentMonthSellPrice, 'Montant total des ventes ce mois-ci');
+        return $this->sendResponse($currentMonthSellPrice, 'Montant total des ventes ');
     }
-    public function getCurrentMonthSellMotoNumber () {
-        $currentMonth = date('m');
-        $currentMonthSell = Vente::whereMonth('created_at', $currentMonth)->get();
-        $currentMonthMotoNumber = count($currentMonthSell);
-        return $this->sendResponse($currentMonthMotoNumber, 'Nombre total des motos vendues ce mois-ci');
+  
+
+    public function TodayVenteListPaginate ($page) {
+        try {
+            $today = date('Y-m-d');
+            $motos = Vente::whereDate('created_at', $today)->paginate(10, ['*'], 'page', $page);
+            return $this->sendResponse($motos, 'Liste des motos vendues');
+          
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage());
+        } catch (\Throwable $th) {
+            return $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
     }
+
+    
+    
 }

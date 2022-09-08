@@ -18,7 +18,7 @@ class OtherFunctionController extends BaseController
            if (count($motos) > 0) {
                 return $this->sendResponse($motos, 'Motos du stock');
             } else {
-                return $this->sendError('Aucune moto dans ce stock');
+                return $this->sendResponse($motos ,'Aucune moto dans ce stock');
             }
         } catch (\Throwable $th) {
            return $this->sendError('Une erreur est survenue', $th->getMessage());

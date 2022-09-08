@@ -42,14 +42,14 @@ class MotoController extends BaseController
             'marque' => 'required|string|max:255',
         ]);
         
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
 
       try{
         $lastStock = Stock::orderBy('created_at', 'desc')->first();
         $input = $request->all();
-        $input['numero_stock'] = $lastStock->numero_stock;
+        // $input['numero_stock'] = $lastStock->numero_stock;
         $moto = Moto::create($input);
         return $this->sendResponse($moto, 'Moto ajoutée avec succès');
       }
