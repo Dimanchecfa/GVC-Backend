@@ -14,7 +14,7 @@ class MotoFactory extends Factory
     public function definition()
     {
         return [
-            'numero_stock' => $this->faker->randomNumber(8),
+            'numero_stock' => 'STOCK-1234',
             'numero_serie' => $this->faker->randomNumber(8),
             'marque' => $this->faker->word(),
             'modele' => $this->faker->word(),

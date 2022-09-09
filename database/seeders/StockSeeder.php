@@ -15,7 +15,7 @@ class StockSeeder extends Seeder
     public function run()
     {
         $stock = array(
-            [   'numero' => 'STOCK-2022-01-01/010',
+            [   'numero' => 'STOCK-1237',
                 'nom_fournisseur' => 'Honda',
                 'numero_fournisseur' => 'CBR',
                 'nombre_moto' => '10',
