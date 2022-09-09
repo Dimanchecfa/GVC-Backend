@@ -30,7 +30,7 @@ Route::ApiResource('marque', MarqueController::class);
 Route::ApiResource('model', ModeleController::class);
 Route::ApiResource('moto' , MotoController::class);
 Route::ApiResource('vente', VenteController::class);
-    Route::ApiResource('commerciale' , CommercialeController::class)->except(['index']);
+Route::ApiResource('commerciale' , CommercialeController::class);
 Route::get('dashboard_price', [DashboardController::class, 'getTodaySellPrice']);
 Route::get('dashboard_moto', [DashboardController::class, 'getTodayMotoNumber']);
 
@@ -43,7 +43,6 @@ Route::get('history/lastmonth/moto_number' , [HistoricalController::class, 'getL
 Route::get('history/currentmonth/price' , [HistoricalController::class, 'getCurrentMonthSellPrice']);
 Route::get('history/currentmonth/moto_number' , [HistoricalController::class, 'getCurrentMonthSellMotoNumber']);
 Route::get('history/currentmonth/sell_moto' , [DashboardController::class,'getCurrentMonthSell']);
-
 Route::get('history/{date}/price' , [HistoricalController::class, 'getSellPriceByDate']);
 Route::get('history/{date}/moto_number' , [HistoricalController::class, 'getSellNumberByDate']);
 
@@ -56,24 +55,17 @@ Route::get('moto/marque/{marque}', [OtherFunctionController::class, 'getMotoByMa
 Route::get('moto/statut/{statut}', [OtherFunctionController::class, 'getMotoByStatut']);
 Route::get('modele/marque/{marque}', [OtherFunctionController::class, 'getModeleByMarque']);
 Route::get('commerciale/pseudo/{pseudo}', [OtherFunctionController::class, 'getCommercialeByPseudo']);
+Route::get('moto/vente/{numero_serie}', [OtherFunctionController::class, 'getVenteByNumeroSerie']);
+Route::get('vente/statut/payé', [OtherFunctionController::class, 'getAllSellStatutPayé']);
+Route::get('vente/statut/non_payé', [OtherFunctionController::class, 'getAllSellStatutNonPayé']);
+Route::get('vente/number/payé', [OtherFunctionController::class, 'getAllSellStatutPayéNumber']);
+Route::get('vente/number/non_payé', [OtherFunctionController::class, 'getAllSellStatutNonPayéNumber']);
+Route::get('moto/number/stocker', [OtherFunctionController::class, 'getAllMotoEnStock']);
+Route::get('moto/number/vendue', [OtherFunctionController::class, 'getAllMotoVendue']);
 
 Route::get('/vente/today/{page}', [HistoricalController::class, 'TodayVenteListPaginate']);
 Route::get('/stock/page/{page}', [DataController::class, 'StockListPaginate']);
 Route::get('/moto/page/{page}/{numero_stock}', [DataController::class, 'MotoListPaginate']);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

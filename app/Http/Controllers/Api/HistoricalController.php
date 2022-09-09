@@ -34,7 +34,11 @@ class HistoricalController extends BaseController
        $currentMonth = date('m');
        $lastMonth = $currentMonth - 1;
        $lastMonthSell = Vente::whereMonth('created_at', $lastMonth)->get();
-      return $this->sendResponse($lastMonthSell, 'Liste des motos vendues le mois dernier');
+        if(count($lastMonthSell) > 0) {
+            return $this->sendResponse($lastMonthSell, 'Liste des ventes du mois dernier');
+        } else {
+            return $this->sendResponse($lastMonthSell , 'Aucune vente');
+        }
 
     }
     public function getLastMonthSellPrice () {

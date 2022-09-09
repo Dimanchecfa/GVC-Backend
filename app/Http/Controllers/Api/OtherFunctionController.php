@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Modele;
 use App\Models\Moto ;
 use App\Models\Commerciale ;
+use App\Models\Vente ;
 
 class OtherFunctionController extends BaseController
 {
@@ -80,8 +81,89 @@ class OtherFunctionController extends BaseController
         }
     }
 
+    public function getVenteByNumeroSerie($numero_serie) {
+        try{
+            $vente = Vente::where('numero_serie', $numero_serie)->get();
+            if(count($vente) > 0) {
+                return $this->sendResponse($vente, 'Vente du numéro de série');
+            } else {
+                return $this->sendResponse($vente, 'Aucune vente de ce numéro de série');
+            }
+        }
+        catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
 
-    
+    public function getAllSellStatutPayé () {
+        try {
+            $ventes = Vente::where('statut', 'payé')->get();
+            if(count($ventes) > 0) {
+                return $this->sendResponse($ventes, 'Ventes avec statut payé');
+            } else {
+                return $this->sendResponse($ventes, 'Aucune vente payée');
+            }
+        } catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+    public function  getAllSellStatutNonPayé () {
+        try {
+            $ventes = Vente::where('statut', 'en_cours')->get();
+            if(count($ventes) > 0) {
+                return $this->sendResponse($ventes, 'Ventes avec statut non payé');
+            } else {
+                return $this->sendResponse($ventes, 'Aucune vente non payée');
+            }
+        } catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+
+    public function getAllSellStatutPayéNumber () {
+        try {
+            $ventes = Vente::where('statut', 'payé')->get();
+           $number = count($ventes);
+            return $this->sendResponse($number, 'Nombre de ventes avec statut payé');
+        } catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+    public function  getAllSellStatutNonPayéNumber () {
+        try {
+            $ventes = Vente::where('statut', 'en_cours')->get();
+            $number = count($ventes);
+            return $this->sendResponse($number, 'Nombre de ventes avec statut non payé');
+        } catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+
+    public function getAllMotoEnStock () {
+        try {
+            $motos = Moto::where('statut', 'en_stock')->get();
+            if(count($motos) > 0) {
+                return $this->sendResponse($motos, 'Motos en stock');
+            } else {
+                return $this->sendResponse($motos, 'Aucune moto en stock');
+            }
+        } catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+    public function getAllMotoVendue () {
+        try {
+            $motos = Moto::where('statut', 'vendue')->get();
+            if(count($motos) > 0) {
+                return $this->sendResponse($motos, 'Motos vendues');
+            } else {
+                return $this->sendResponse($motos, 'Aucune moto vendue');
+            }
+        } catch (\Throwable $th) {
+            return  $this->sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+     
 }
     
 
