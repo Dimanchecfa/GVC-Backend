@@ -152,7 +152,7 @@ class VenteController extends BaseController
             'prix_vente' => 'required|string|max:255',
             'montant_verse' => 'required|string|max:255',
             'statut' => 'required|string|max:255',
-           'numero_facture' => 'required|string|max:255:unique:ventes',
+           
         ]);
         if ($validate->fails()) {
             return $this->sendError(

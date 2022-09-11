@@ -39,12 +39,14 @@ class CommercialeController extends BaseController
             'pseudo' => 'required',
             'logo' => 'required',
         ]);
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
-            $commerciale = Commerciale::create($request->all());
-                return $this->sendResponse( $commerciale ,'Commerciale ajoutée avec succès',);
+          $input = $request->all();
+          
+              $commerciale = Commerciale::create($input);
+                return $this->sendResponse($commerciale, 'Commerciale créée avec succès');
         } catch (\Throwable $th) {
             return $this->sendError('Une erreur est survenue', $th->getMessage());
         }
@@ -53,12 +55,13 @@ class CommercialeController extends BaseController
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Commerciale  $commerciale
+     * @param $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Commerciale $commerciale)
+    public function show($id)
     {
         try {
+            $commerciale = Commerciale::find($id);
             return $this->sendResponse($commerciale, 'Commerciale récupérée avec succès');
         } catch (\Throwable $th) {
            return $this->sendError('Une erreur est survenue', $th->getMessage());
@@ -73,7 +76,7 @@ class CommercialeController extends BaseController
      * @param  \App\Models\Commerciale  $commerciale
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Commerciale $commerciale)
+    public function update(Request $request, $id)
     {
         $validate = Validator::make($request->all(), [
             'nom' => 'required',
@@ -81,11 +84,14 @@ class CommercialeController extends BaseController
              'pseudo' => 'required',
              'logo' => 'required',
          ]);
-         if($validate->fails) {
+         if($validate->fails()) {
              return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
          }
          try {
-             $commerciale->update($request->all());
+                $input = $request->all();
+                $commerciale = Commerciale::find($id);
+                // $input['logo'] = $request->file('logo')->store('public/logo');
+                $commerciale->update($input);
              return $this->sendResponse($commerciale, 'Commerciale modifiée avec succès');
          } catch (\Throwable $th) {
              return $this->sendError('Une erreur est survenue', $th->getMessage());
@@ -95,12 +101,13 @@ class CommercialeController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Commerciale  $commerciale
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Commerciale $commerciale)
+    public function destroy($id)
     {
         try {
+            $commerciale = Commerciale::find($id);
             $commerciale->delete();
             return $this->sendResponse($commerciale, 'Commerciale supprimée avec succès');
         } catch (\Throwable $th) {

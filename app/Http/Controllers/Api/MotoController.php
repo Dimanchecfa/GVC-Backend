@@ -49,8 +49,11 @@ class MotoController extends BaseController
       try{
         $lastStock = Stock::orderBy('created_at', 'desc')->first();
         $input = $request->all();
-        // $input['numero_stock'] = $lastStock->numero_stock;
+        $input['numero_stock'] = $lastStock->numero;
         $moto = Moto::create($input);
+        $nombre = $lastStock->nombre_moto + 1;
+        $lastStock->nombre_moto = $nombre;
+        $lastStock->save();
         return $this->sendResponse($moto, 'Moto ajoutée avec succès');
       }
 

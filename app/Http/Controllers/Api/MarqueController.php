@@ -39,7 +39,7 @@ class MarqueController extends BaseController
         ]);
 
 
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this -> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {

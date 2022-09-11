@@ -37,10 +37,10 @@ class MotoSeeder extends Seeder
             'marque' => 'Honda',
             'modele' => 'CBR',
             'couleur' => 'Noir',
-            'statut' => 'en_stock',
+            'statut' => 'vendue',
         ],
         [
-            'numero_stock' => 'STOCK-1237',
+            'numero_stock' => 'STOCK-1240',
             'numero_serie' => '12345681',
             'marque' => 'Honda',
             'modele' => 'CBR',
@@ -53,7 +53,7 @@ class MotoSeeder extends Seeder
             'marque' => 'Honda',
             'modele' => 'CBR',
             'couleur' => 'Noir',
-            'statut' => 'en_stock',
+            'statut' => 'vendue',
         ],
         [
             'numero_stock' => 'STOCK-1237',
@@ -69,7 +69,7 @@ class MotoSeeder extends Seeder
             'marque' => 'Honda',
             'modele' => 'CBR',
             'couleur' => 'Noir',
-            'statut' => 'en_stock',
+            'statut' => 'vendue',
         ],
        
         );

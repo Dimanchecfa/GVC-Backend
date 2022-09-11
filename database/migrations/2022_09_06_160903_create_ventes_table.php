@@ -27,7 +27,7 @@ class CreateVentesTable extends Migration
             $table->string('prix_vente');
             $table->string('montant_verse');
             $table->string('montant_restant')->nullable();
-            $table->enum('statut', ['en_cours', 'payé',])->default('payé');
+            $table->enum('statut', ['en_cours', 'payé',]);
             $table->date('date_versement')->nullable();
             $table->string('numero_facture')->unique()->nullable();
            

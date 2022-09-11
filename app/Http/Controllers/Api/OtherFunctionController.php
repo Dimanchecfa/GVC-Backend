@@ -61,7 +61,7 @@ class OtherFunctionController extends BaseController
             if(count($modeles) > 0) {
                 return $this->sendResponse($modeles, 'Modèles de la marque');
             } else {
-                return $this->sendError('Aucun modèle de cette marque');
+                return $this->sendResponse($modeles, 'Aucun modeles de la marque');
             }
         } catch (\Throwable $th) {
             return  $this->sendError('Une erreur est survenue', $th->getMessage());

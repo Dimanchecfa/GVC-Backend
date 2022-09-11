@@ -21,7 +21,7 @@ class StockSeeder extends Seeder
                 'nombre_moto' => '10',
             ], 
             [
-                'numero' => 'STOCK-2022-01-01/02',
+                'numero' => 'STOCK-1240',
                 'nom_fournisseur' => 'Yamaha',
                 'numero_fournisseur' => 'R1',
                 'nombre_moto' => '10',

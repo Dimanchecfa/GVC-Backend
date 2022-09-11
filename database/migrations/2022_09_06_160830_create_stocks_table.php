@@ -15,7 +15,7 @@ class CreateStocksTable extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('numero')->unique(); // numero de la moto
+            $table->string('numero')->unique(); // numero du stock
             $table->string('nom_fournisseur');
             $table->string('numero_fournisseur');
             $table->string('nombre_moto')->nullable();

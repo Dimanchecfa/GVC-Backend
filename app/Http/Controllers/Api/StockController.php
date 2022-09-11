@@ -35,7 +35,7 @@ class StockController extends BaseController
     public function store(Request $request)
     {
        $validate = Validator::make($request->all(), [
-            'numero' => 'required|string|max:255',
+            
             'nom_fournisseur' => 'required|string|max:255',
             'numero_fournisseur' => 'required|string|max:255',
             
@@ -47,13 +47,14 @@ class StockController extends BaseController
         }
       try { 
         if(Stock::all()->count() < 1) {
-            $stockNumber = 'STOCK-'.date('Y').'-'.date('m').'-'.date('d').'/'.'00';
+            $stockNumber = 'STOCK'.'-'.'000';
         }
         $lastStock = Stock::orderBy('created_at', 'desc')->first();
-        $stockNumber = 'STOCK-'.date('Y').'-'.date('m').'-'.date('d').'/'.($lastStock->id + 00);
+        $stockNumber = 'STOCK'.'-'.($lastStock->id + 000);
 
         $input = $request->all();
-        $input['numero_stock'] = $stockNumber;
+        $input['numero'] = $stockNumber;
+        $input['nombre_moto'] = 0;
         $stock = Stock::create($input);
         return $this->sendResponse($stock, 'Stock ajouté avec succès');
     }catch(\Throwable $th){

@@ -35,10 +35,10 @@ class ModeleController extends BaseController
     {
         $validate = Validator::make($request->all(), [
             'nom' => 'required|string|max:255',
-            'marque_nom' => 'required|integer'
+            'marque_nom' => 'required|string|max:255',
         ]);
 
-        if($validate->fails) {
+        if($validate->fails()) {
             return $this -> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
         }
         try {
