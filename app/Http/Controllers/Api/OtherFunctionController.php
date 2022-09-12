@@ -7,10 +7,41 @@ use Illuminate\Http\Request;
 use App\Models\Modele;
 use App\Models\Moto ;
 use App\Models\Commerciale ;
+use App\Models\Stock;
 use App\Models\Vente ;
+use Illuminate\Support\Facades\Validator;
 
 class OtherFunctionController extends BaseController
 {
+
+
+
+    public function addMotors( Request $request) {
+        $validate = Validator::make($request->all() , [
+            "numero_stock" => "required|string|max:255",
+            "numero_serie" => "required|string|max:255",
+            "marque" => "required|string|max:255",
+            "modele" => "required|string|max:255",
+            "couleur" => "required|string|max:255",
+        ]);
+        if($validate->fails()) {
+            return $this -> sendError('Veuillez remplir tous les champs', $validate->errors() , 400);
+        }
+        try {
+            $moto = Moto::create($request->all());
+            $stock = Stock::where('numero', $request->numero_stock)->first();
+            $nombre = $stock->nombre_moto + 1;
+            $stock->nombre_moto = $nombre;
+            $stock->save();
+            return $this -> sendResponse( $moto ,'Moto ajoutée avec succès',);
+        } catch (\Throwable $th) {
+            return $this -> sendError('Une erreur est survenue', $th->getMessage());
+        }
+    }
+
+
+
+
     
     public function getMotoByStock($numero_stock)
     {

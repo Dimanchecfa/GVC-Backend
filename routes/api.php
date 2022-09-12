@@ -47,7 +47,7 @@ Route::get('history/{date}/price' , [HistoricalController::class, 'getSellPriceB
 Route::get('history/{date}/moto_number' , [HistoricalController::class, 'getSellNumberByDate']);
 
 
-
+Route::post("motos/add" , [OtherFunctionController::class, 'addMotors']);
 
 
 Route::get('moto/stock/{numero_stock}', [OtherFunctionController::class, 'getMotoByStock']);
