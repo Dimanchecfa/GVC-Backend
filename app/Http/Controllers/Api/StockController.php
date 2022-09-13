@@ -46,12 +46,14 @@ class StockController extends BaseController
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors(), 400);
         }
       try { 
-        if(Stock::all()->count() < 1) {
+        if(Stock::all()->count() === 0) {
             $stockNumber = 'STOCK'.'-'.'000';
         }
-        $lastStock = Stock::orderBy('created_at', 'desc')->first();
-        $stockNumber = 'STOCK'.'-'.($lastStock->id + 000);
+        else{
+            $lastStock = Stock::orderBy('created_at', 'desc')->first();
+            $stockNumber = 'STOCK'.'-'.($lastStock->id + 000);
 
+        }
         $input = $request->all();
         $input['numero'] = $stockNumber;
         $input['nombre_moto'] = 0;
