@@ -35,7 +35,7 @@ Route::get('dashboard_price', [DashboardController::class, 'getTodaySellPrice'])
 Route::get('dashboard_moto', [DashboardController::class, 'getTodayMotoNumber']);
 
 
-Route::get('history/{date}/sell' , [HistoricalController::class, 'getSellByDate']);
+Route::get('history/{date}/{page}' , [HistoricalController::class, 'getSellByDate']);
 Route::get('history/{date}/moto' , [HistoricalController::class, 'getSellMotoNumberByDate']);
 Route::get('history/lastmonth' , [HistoricalController::class, 'getLastMonthSell']);
 Route::get('history/lastmonth/price' , [HistoricalController::class, 'getLastMonthSellPrice']);
@@ -66,6 +66,11 @@ Route::get('moto/number/vendue', [OtherFunctionController::class, 'getAllMotoVen
 Route::get('/vente/today/{page}', [HistoricalController::class, 'TodayVenteListPaginate']);
 Route::get('/stock/page/{page}', [DataController::class, 'StockListPaginate']);
 Route::get('/moto/page/{page}/{numero_stock}', [DataController::class, 'MotoListPaginate']);
+Route::get('/commerciale/page/{page}' , [DataController::class , 'CommercialeListPaginate']);
+Route::get('/modele/page/{page}' , [DataController::class , 'ModeleListPaginate']);
+Route::get('/marque/page/{page}' , [DataController::class , 'MarqueListPaginate']);
+
+Route::get('/vente/en_cours/{page}' , [DataController::class , 'getSellByStatutEnCours']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

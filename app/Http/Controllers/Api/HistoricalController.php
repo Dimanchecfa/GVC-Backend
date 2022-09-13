@@ -12,8 +12,8 @@ use App\Models\Marque;
 class HistoricalController extends BaseController
 {
     
-    public function getSellByDate($date) {
-        $motos = Vente::whereDate('created_at', $date)->get();
+    public function getSellByDate($date , $page) {
+        $motos = Vente::whereDate('created_at', $date)->paginate(10 , ['*'] ,'page' , $page);
 
         if(count($motos) > 0) {
             return $this->sendResponse($motos, 'Liste des ventes');
