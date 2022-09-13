@@ -60,7 +60,7 @@ class StockController extends BaseController
         $stock = Stock::create($input);
         return $this->sendResponse($stock, 'Stock ajouté avec succès');
     }catch(\Throwable $th){
-            return $this->sendError('Une erreur est survenue', $th->getMessage());
+            return $this->sendError('Une erreur est survenu', $th->getMessage());
     }
         
 
