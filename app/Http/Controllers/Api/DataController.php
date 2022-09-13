@@ -112,4 +112,18 @@ public function getSellByStatutEnCours($page) {
 }
 
 
+public function getLastVente () {
+    try{
+        $vente = Vente::orderBy('id', 'desc')->first();
+        if($vente) {
+            return $this->sendResponse($vente, 'Derniere vente');
+        } else {
+            return $this->sendError('Aucune vente');
+        }
+    }
+    catch (\Throwable $th) {
+        return $this->sendError('Une erreur est survenue', $th->getMessage());
+    }
+}
+
 }

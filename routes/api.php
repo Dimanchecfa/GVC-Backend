@@ -69,6 +69,7 @@ Route::get('/moto/page/{page}/{numero_stock}', [DataController::class, 'MotoList
 Route::get('/commerciale/page/{page}' , [DataController::class , 'CommercialeListPaginate']);
 Route::get('/modele/page/{page}' , [DataController::class , 'ModeleListPaginate']);
 Route::get('/marque/page/{page}' , [DataController::class , 'MarqueListPaginate']);
+Route::get('/last_vente' , [DataController::class  , 'getLastVente']);
 
 Route::get('/vente/en_cours/{page}' , [DataController::class , 'getSellByStatutEnCours']);
 
