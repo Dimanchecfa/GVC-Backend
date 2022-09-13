@@ -37,7 +37,6 @@ class CommercialeController extends BaseController
            'nom' => 'required',
            'numero' => 'required',
             'pseudo' => 'required',
-            'logo' => 'required',
         ]);
         if($validate->fails()) {
             return $this->sendError('Veuillez remplir tous les champs', $validate->errors() , 400);

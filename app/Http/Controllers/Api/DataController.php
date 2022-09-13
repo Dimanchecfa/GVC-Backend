@@ -97,6 +97,7 @@ public function ModeleListPaginate($page) {
     }
 }
 
+
 public function getSellByStatutEnCours($page) {
     try{
         $ventes = Vente::where('statut' , 'en_cours')->paginate(10, ['*'], 'page', $page);
